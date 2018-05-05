@@ -3,13 +3,12 @@ var router = require('express').Router();
 var request = require('request');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-	/*
-	request('https://www.nytimes.com/', function (err, resHead, body) {
-			res.send(body);
-	});
-	*/
+router.get('/', function(req, res) {
 	res.render('index');
+});
+
+router.get('/saved', function (req, res) {
+	res.render('saved');
 });
 
 router.use('/api', require('./api.js'));

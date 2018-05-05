@@ -3,7 +3,10 @@ var request = require('request');
 var cheerio = require('cheerio');
 module.exports = {}
 
-module.exports.getHeadlines = function (query) {
+module.exports.getHeadlines = function (query, cb) {
+	models.Article.find(query, null, function (err, docs) {
+		cb(docs);
+	});
 }
 
 module.exports.scrape = function (cb) {
@@ -25,6 +28,8 @@ module.exports.scrape = function (cb) {
 					article.summary = $(this).find('.summary').text().trim();
 					//date
 					article.date = $(this).find('time').attr('content');
+					//saved
+					article.saved = false;
 					//Add to articles array
 					articles.push(article);
 				});
@@ -34,9 +39,20 @@ module.exports.scrape = function (cb) {
 		//console.log(articles);
 		console.log('Number articles scraped: '+articles.length);
 		models.Article.create(articles, function (err, objs) {	
+			if(err) console.log(err);
 			//Callback function
 			cb();
 		});
 	});
 }
 
+module.exports.update = function(req, cb) {
+	var filter = {_id:req.body._id};
+	var changes = req.body;
+	delete changes._id;
+	models.Article.update(filter, changes, () => cb());	
+}
+
+module.exports.del = function(req, cb) {
+	models.Article.deleteOne({_id:req.params.id}, () => cb());
+}
