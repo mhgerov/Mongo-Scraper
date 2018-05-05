@@ -4,10 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var exphbs = require('express-handlebars');
-
 var router = require('./routes');
-
 var app = express();
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/mongoscraper');
+mongoose.connection.on('open', function() {
+	require('./models');
+});
 
 // view engine setup
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
