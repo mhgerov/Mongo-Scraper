@@ -24,7 +24,7 @@ router.delete('/headlines/:id', function (req,res) {
 
 //Scrape for articles and add new ones to database
 router.get('/fetch', function (req, res) {
-	controller.scrape(()=>res.sendStatus(200));
+	controller.scrape((count)=>res.json({message:count+' articles found'}));
 });
 
 //Retrieve notes based off Article _id

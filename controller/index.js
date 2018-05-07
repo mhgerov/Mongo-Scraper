@@ -16,7 +16,6 @@ module.exports.scrape = function (cb) {
 		var articles = [];
 		var count = 0;
 		$('ol.initial-set').each(function() {
-			//').each(function() {
 			if (count<1) {
 				$(this).find('li[id^="story"]').each(function() {
 					var article = {};
@@ -36,12 +35,21 @@ module.exports.scrape = function (cb) {
 				count++;
 			}
 		});
-		//console.log(articles);
-		console.log('Number articles scraped: '+articles.length);
-		models.Article.create(articles, function (err, objs) {	
-			if(err) console.log(err);
-			//Callback function
-			cb();
+		var newArticles = [];
+		models.Article.find({},{headline:true}, function (err,docs) {
+			for (i in articles) {
+				var found=false;
+				var j=0;
+				while(!found && j<docs.length) {
+					if (articles[i].headline == docs[j].headline) found=true;
+					j++;
+				}
+				if (!found) newArticles.push(articles[i])
+			}	
+			models.Article.create(newArticles, function (err, objs) {	
+				if(err) console.log(err);
+				cb(articles.length+'articles scraped, '+newArticles.length+' added');
+			});
 		});
 	});
 }
