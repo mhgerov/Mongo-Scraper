@@ -35,6 +35,7 @@ router.get('/notes/:id', function (req,res) {
 });
 
 router.delete('/notes/:id', function (req,res) {
+	console.log('Routes: '+req.params.id);
 	controller.delNote(req, () => res.sendStatus(200));	
 });
 

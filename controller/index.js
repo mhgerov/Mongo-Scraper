@@ -69,5 +69,5 @@ module.exports.newNote = function(req, cb) {
 }
 
 module.exports.delNote = function (req, cb) {
-	models.Note.deleteOne({_id:req.params._id}, () => cb());
+	models.Note.deleteOne({_id:req.params.id}, () => cb());
 }
