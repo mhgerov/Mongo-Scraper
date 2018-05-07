@@ -53,6 +53,21 @@ module.exports.update = function(req, cb) {
 	models.Article.update(filter, changes, () => cb());	
 }
 
-module.exports.del = function(req, cb) {
+module.exports.delHeadline = function(req, cb) {
 	models.Article.deleteOne({_id:req.params.id}, () => cb());
+}
+
+module.exports.getNotes = function(req, cb) {
+	models.Note.find({article_id:req.params.id}, (err,docs) => cb(docs));
+}
+
+module.exports.newNote = function(req, cb) {
+	var note = {article_id:req.body._id,noteText:req.body.noteText};
+	models.Note.create(note, (err, obj) => {
+		cb();
+	});
+}
+
+module.exports.delNote = function (req, cb) {
+	models.Note.deleteOne({_id:req.params._id}, () => cb());
 }
