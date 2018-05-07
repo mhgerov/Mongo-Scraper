@@ -8,7 +8,7 @@ var router = require('./routes');
 var app = express();
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/mongoscraper');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mongoscraper');
 mongoose.connection.on('open', function() {
 	require('./models');
 });
